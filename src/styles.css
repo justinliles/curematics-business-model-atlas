@@ -910,3 +910,249 @@ h1,h2,h3,h4,p { margin-top: 0; }
     grid-template-columns: 1fr;
   }
 }
+
+
+/* Desktop compression + tabbed information architecture */
+.group-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: -2px 0 14px;
+}
+
+.group-tabs button {
+  flex: 1 1 160px;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 11px 12px;
+  color: var(--text);
+  text-align: left;
+  background: rgba(255,255,255,0.035);
+  transition: 0.18s ease;
+}
+
+.group-tabs button strong {
+  display: block;
+  margin-bottom: 3px;
+  font-size: 13px;
+}
+
+.group-tabs button span {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.group-tabs button.active {
+  border-color: rgba(77,231,255,0.42);
+  background: linear-gradient(135deg, rgba(77,231,255,0.13), rgba(143,124,255,0.12));
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04), 0 12px 26px rgba(77,231,255,0.08);
+}
+
+.canvas-grid.compact.market,
+.strategy-grid.compact {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.canvas-grid.compact.money {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.canvas-grid.compact.operations {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.canvas-grid.compact .canvas-card,
+.strategy-grid.compact .strategy-card {
+  min-height: 220px;
+}
+
+@media (min-width: 1281px) {
+  .top-hero {
+    padding-top: 18px;
+    padding-bottom: 16px;
+  }
+
+  .hero-copy-block {
+    margin-top: 24px;
+    gap: 14px;
+  }
+
+  .top-hero h1 {
+    max-width: 760px;
+    margin-bottom: 10px;
+    font-size: clamp(38px, 4.9vw, 64px);
+    line-height: 0.95;
+  }
+
+  .top-hero p {
+    max-width: 720px;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  .workspace-shell {
+    max-width: 1640px;
+    grid-template-columns: 300px minmax(0, 1fr);
+    gap: 16px;
+    padding-top: 0;
+  }
+
+  .sidebar-shell {
+    position: sticky;
+    top: 16px;
+    align-self: start;
+    max-height: calc(100vh - 24px);
+    overflow: auto;
+    padding-right: 2px;
+  }
+
+  .sidebar-brand,
+  .sidebar-card {
+    border-radius: 18px;
+    padding: 14px;
+  }
+
+  .mode-tab {
+    border-radius: 15px;
+    padding: 11px 12px;
+  }
+
+  .field {
+    margin-bottom: 9px;
+  }
+
+  .field input,
+  .field select {
+    padding: 10px 12px;
+    border-radius: 12px;
+  }
+
+  .dashboard-shell {
+    padding: 16px;
+    border-radius: 26px;
+  }
+
+  .toolbar {
+    padding: 14px 16px;
+    margin-bottom: 12px;
+  }
+
+  .toolbar h2 {
+    font-size: clamp(24px, 2.4vw, 34px);
+  }
+
+  .business-header-card {
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+
+  .business-logo {
+    width: 54px;
+    height: 54px;
+    border-radius: 18px;
+    font-size: 18px;
+  }
+
+  .business-identity h3 {
+    font-size: clamp(22px, 2vw, 30px);
+    margin-bottom: 8px;
+  }
+
+  .score-grid {
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .score-card {
+    border-radius: 18px;
+    padding: 13px;
+  }
+
+  .score-card strong {
+    font-size: 30px;
+  }
+
+  .analytics-grid {
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .panel-card,
+  .canvas-section,
+  .strategy-section,
+  .side-card {
+    border-radius: 20px;
+    padding: 14px;
+  }
+
+  .panel-head,
+  .section-head {
+    margin-bottom: 10px;
+  }
+
+  .content-grid {
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 12px;
+  }
+
+  .side-column {
+    position: sticky;
+    top: 16px;
+    align-self: start;
+    max-height: calc(100vh - 32px);
+    overflow: auto;
+    padding-right: 2px;
+  }
+
+  .canvas-card,
+  .strategy-card {
+    padding: 14px;
+  }
+
+  .canvas-card ul,
+  .strategy-card ul {
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  .mini-atlas {
+    padding: 13px;
+  }
+}
+
+@media (min-width: 1500px) {
+  .analytics-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .radar-svg {
+    width: min(100%, 220px);
+  }
+}
+
+@media (max-width: 980px) {
+  .canvas-grid.compact.market,
+  .canvas-grid.compact.money,
+  .canvas-grid.compact.operations,
+  .strategy-grid.compact {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .canvas-grid.compact.market,
+  .canvas-grid.compact.money,
+  .canvas-grid.compact.operations,
+  .strategy-grid.compact {
+    grid-template-columns: 1fr;
+  }
+
+  .group-tabs button {
+    flex-basis: 100%;
+  }
+}

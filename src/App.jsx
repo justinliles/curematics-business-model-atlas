@@ -70,6 +70,20 @@ const strategyBlockConfig = [
   { key: 'monetizationUpgrades', title: 'Monetization Upgrades', accent: 'blue' }
 ];
 
+const canvasGroups = [
+  { id: 'market', title: 'Market', label: 'Market & Positioning', blocks: ['customerSegments', 'valueProposition', 'channels', 'customerRelationships'] },
+  { id: 'money', title: 'Money', label: 'Revenue & Economics', blocks: ['revenueStreams', 'costStructure'] },
+  { id: 'operations', title: 'Operations', label: 'Operations & Delivery', blocks: ['keyActivities', 'keyResources', 'keyPartners'] }
+];
+
+const strategyGroups = [
+  { id: 'growth', title: 'Growth', label: 'Growth & Monetization', blocks: ['growthLevers', 'monetizationUpgrades'] },
+  { id: 'execution', title: 'Execution', label: 'Execution Stack', blocks: ['kpis', 'technologyOpportunities'] },
+  { id: 'visibility', title: 'Visibility & Risk', label: 'Visibility, Risk & Recommendation', blocks: ['seoContentPlay', 'riskPoints'], showRecommendation: true }
+];
+
+const strategyMetaByKey = Object.fromEntries(strategyBlockConfig.map((block) => [block.key, block]));
+
 function App() {
   const [mode, setMode] = useState('known');
   const [known, setKnown] = useState(emptyKnown);
@@ -83,6 +97,8 @@ function App() {
   const [activeStage, setActiveStage] = useState(0);
   const [error, setError] = useState('');
   const [copied, setCopied] = useState('');
+  const [canvasTab, setCanvasTab] = useState('market');
+  const [strategyTab, setStrategyTab] = useState('growth');
   const exportRef = useRef(null);
 
   const visibleResult = useMemo(() => {
@@ -192,6 +208,8 @@ function App() {
     }
   }
 
+  const activeCanvasGroup = canvasGroups.find((group) => group.id === canvasTab) || canvasGroups[0];
+  const activeStrategyGroup = strategyGroups.find((group) => group.id === strategyTab) || strategyGroups[0];
   const progressSteps = buildProgressSteps(status, loading);
   const radarData = getRadarData(visibleResult);
   const revenueMix = getRevenueMix(visibleResult?.canvas?.revenueStreams || []);
@@ -301,10 +319,12 @@ function App() {
                   </div>
                   <span className="section-chip">9 blocks</span>
                 </div>
-                <div className="canvas-grid">
-                  {Object.entries(canvasBlockConfig).map(([key, meta]) => (
-                    <CanvasCard key={key} title={meta.title} items={visibleResult?.canvas?.[key]} color={meta.color} />
-                  ))}
+                <GroupTabs groups={canvasGroups} activeId={canvasTab} onChange={setCanvasTab} />
+                <div className={`canvas-grid compact ${activeCanvasGroup.id}`}>
+                  {activeCanvasGroup.blocks.map((key) => {
+                    const meta = canvasBlockConfig[key];
+                    return <CanvasCard key={key} title={meta.title} items={visibleResult?.canvas?.[key]} color={meta.color} />;
+                  })}
                 </div>
               </section>
 
@@ -316,17 +336,21 @@ function App() {
                   </div>
                   <span className="section-chip">Actionable</span>
                 </div>
-                <div className="strategy-grid">
-                  {strategyBlockConfig.map((block) => (
-                    <StrategyCard
-                      key={block.key}
-                      title={block.title}
-                      items={asList(visibleResult?.strategy?.[block.key])}
-                      accent={block.accent}
-                    />
-                  ))}
+                <GroupTabs groups={strategyGroups} activeId={strategyTab} onChange={setStrategyTab} />
+                <div className={`strategy-grid compact ${activeStrategyGroup.id}`}>
+                  {activeStrategyGroup.blocks.map((key) => {
+                    const block = strategyMetaByKey[key];
+                    return (
+                      <StrategyCard
+                        key={block.key}
+                        title={block.title}
+                        items={asList(visibleResult?.strategy?.[block.key])}
+                        accent={block.accent}
+                      />
+                    );
+                  })}
                 </div>
-                <RecommendationCard text={visibleResult?.strategy?.curematicsRecommendation} />
+                {activeStrategyGroup.showRecommendation && <RecommendationCard text={visibleResult?.strategy?.curematicsRecommendation} />}
               </section>
             </div>
 
@@ -847,6 +871,24 @@ function CandidateList({ candidates, onSelect, loading }) {
           </article>
         ))}
       </div>
+    </div>
+  );
+}
+
+function GroupTabs({ groups, activeId, onChange }) {
+  return (
+    <div className="group-tabs">
+      {groups.map((group) => (
+        <button
+          key={group.id}
+          type="button"
+          className={activeId === group.id ? 'active' : ''}
+          onClick={() => onChange(group.id)}
+        >
+          <strong>{group.title}</strong>
+          <span>{group.label}</span>
+        </button>
+      ))}
     </div>
   );
 }
